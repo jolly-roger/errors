@@ -40,9 +40,11 @@ class robots(object):
         d = urllib.parse.urlencode({'status': '500', 'message': 'Test', 'traceback': 'Test traceback',
             'version': 'None', 'subject': 'Errors test error',
             'cpdata': json.dumps({'base': cherrypy.request.base, 'request_line': cherrypy.request.request_line})})
-        r = urllib.request.urlopen('http://localhost:18404/sendmail', d)
-        
-        return r.read()
+        d = d.encode('utf-8')
+        req = urllib.request.Request('http://localhost:18404/sendmail')
+        req.add_header('Content-Type","application/x-www-form-urlencoded;charset=utf-8')
+        res = urllib.request.urlopen(req, d)
+        return res.read()
 
 def error_page_default(status, message, traceback, version):
     return sendmail(status, message, traceback, version, 'Errors error',
