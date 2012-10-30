@@ -33,7 +33,7 @@ class robots(object):
     @cherrypy.expose
     def testmail(self):
         return sendmail('500', 'Test', 'Test traceback', 'None', 'Errors test error',
-            json.dumps({'base': cherrypy.request.base, 'request_line': cherrypy.request.request_line}))
+            json.loads(json.dumps({'base': cherrypy.request.base, 'request_line': cherrypy.request.request_line})))
     
     @cherrypy.expose
     def testrequest(self):
