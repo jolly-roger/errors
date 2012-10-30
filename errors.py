@@ -39,7 +39,7 @@ class robots(object):
     @cherrypy.expose
     def testrequest(self):
         d = urllib.parse.urlencode({'status': '500', 'message': 'Test', 'traceback': 'Test traceback', 'version': 'None',
-            'cpdata': json.dumps({'subject': 'Errors test error',
+            'data': json.dumps({'subject': 'Errors test error',
                 'base': cherrypy.request.base, 'request_line': cherrypy.request.request_line})})
         d = d.encode('utf-8')
         req = urllib.request.Request('http://localhost:18404/sendmail')
