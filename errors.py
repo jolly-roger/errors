@@ -1,7 +1,7 @@
 import cherrypy
 import smtplib
 import urllib
-import pickle
+import json
 from email.mime.text import MIMEText
 
 
@@ -35,7 +35,7 @@ class robots(object):
     
     @cherrypy.expose
     def testrequest(self):
-        return pickle.dumps(cherrypy.request)
+        return json.dumps(cherrypy.request, skipkeys=True)
 
 def error_page_default(status, message, traceback, version):
     return sendmail(status, message, traceback, version, 'Errors error', cherrypy.request)
