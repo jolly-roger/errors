@@ -26,6 +26,10 @@ class robots(object):
     @cherrypy.expose
     def sendmail(self, status, message, traceback, version, subject, cprequest):
         return sendmail(status, message, traceback, version, subject, cprequest)
+    
+    @cherrypy.expose
+    def test(self):
+        return sendmail('500', 'Test', 'Test traceback', 'None', 'Errors test error', cherrypy.request)
 
 
 def error_page_default(status, message, traceback, version):
