@@ -1,5 +1,7 @@
 import cherrypy
 import smtplib
+import urllib2
+import json
 from email.mime.text import MIMEText
 
 
@@ -28,9 +30,12 @@ class robots(object):
         return sendmail(status, message, traceback, version, subject, cprequest)
     
     @cherrypy.expose
-    def test(self):
+    def testmail(self):
         return sendmail('500', 'Test', 'Test traceback', 'None', 'Errors test error', cherrypy.request)
-
+    
+    @cherrypy.expose
+    def testrequest(self):
+        return json.dumps(cherrypy.request)
 
 def error_page_default(status, message, traceback, version):
     return sendmail(status, message, traceback, version, 'Errors error', cherrypy.request)
