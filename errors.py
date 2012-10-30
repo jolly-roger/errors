@@ -25,14 +25,6 @@ def sendmail(status, message, traceback, version, data):
     s.quit()
 
 
-class customJsonEncoder(json.JSONEncoder):
-    def default(self, obj):
-        try:
-            return json.JSONEncoder.default(self, obj)
-        except:
-            return None
-        
-
 class robots(object):
     @cherrypy.expose
     def sendmail(self, status, message, traceback, version, data):
@@ -55,9 +47,6 @@ class robots(object):
         res = urllib.request.urlopen(req, d)
         return res.read()
     
-    @cherrypy.expose
-    def testjsoncprequest(self):
-        return json.dumps(cherrypy.request, cls=customJsonEncoder)
 
 def error_page_default(status, message, traceback, version):
     return sendmail(status, message, traceback, version,
