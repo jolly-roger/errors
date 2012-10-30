@@ -1,6 +1,6 @@
 import cherrypy
 import smtplib
-import urllib2
+import urllib
 import json
 from email.mime.text import MIMEText
 
