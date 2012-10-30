@@ -6,17 +6,17 @@ import json
 from email.mime.text import MIMEText
 
 
-def sendmail(status, message, traceback, version, subject, cpdata):
+def sendmail(status, message, traceback, version, data):
     sender = 'www@dig-dns.com (www)'
     recipient = 'roger@dig-dns.com'
     
-    text = 'Base: ' + cpdata['base'] + '\n\n' +\
-        'Request line: ' + cpdata['request_line'] + '\n\n' +\
+    text = 'Base: ' + data['base'] + '\n\n' +\
+        'Request line: ' + data['request_line'] + '\n\n' +\
         'Status: ' + status + '\n\n' + 'Message: ' + message + '\n\n' +\
         'Traceback: ' + traceback + '\n\n' + 'Version: ' + version
     
     msg = MIMEText(text)
-    msg['Subject'] = subject
+    msg['Subject'] = data['subject']
     msg['From'] = sender
     msg['To'] = recipient
 
@@ -27,19 +27,20 @@ def sendmail(status, message, traceback, version, subject, cpdata):
 
 class robots(object):
     @cherrypy.expose
-    def sendmail(self, status, message, traceback, version, subject, cpdata):
-        return sendmail(status, message, traceback, version, subject, json.loads(cpdata))
+    def sendmail(self, status, message, traceback, version, data):
+        return sendmail(status, message, traceback, version, json.loads(data))
     
     @cherrypy.expose
     def testmail(self):
-        return sendmail('500', 'Test', 'Test traceback', 'None', 'Errors test error',
-            json.loads(json.dumps({'base': cherrypy.request.base, 'request_line': cherrypy.request.request_line})))
+        return sendmail('500', 'Test', 'Test traceback', 'None',
+            json.loads(json.dumps({'subject': 'Errors error', 'base': cherrypy.request.base,
+                'request_line': cherrypy.request.request_line})))
     
     @cherrypy.expose
     def testrequest(self):
-        d = urllib.parse.urlencode({'status': '500', 'message': 'Test', 'traceback': 'Test traceback',
-            'version': 'None', 'subject': 'Errors test error',
-            'cpdata': json.dumps({'base': cherrypy.request.base, 'request_line': cherrypy.request.request_line})})
+        d = urllib.parse.urlencode({'status': '500', 'message': 'Test', 'traceback': 'Test traceback', 'version': 'None',
+            'cpdata': json.dumps({'subject': 'Errors test error',
+                'base': cherrypy.request.base, 'request_line': cherrypy.request.request_line})})
         d = d.encode('utf-8')
         req = urllib.request.Request('http://localhost:18404/sendmail')
         req.add_header('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8')
@@ -47,8 +48,8 @@ class robots(object):
         return res.read()
 
 def error_page_default(status, message, traceback, version):
-    return sendmail(status, message, traceback, version, 'Errors error',
-        {'base': cherrypy.request.base, 'request_line': cherrypy.request.request_line})
+    return sendmail(status, message, traceback, version,
+        {'subject': 'Errors error', 'base': cherrypy.request.base, 'request_line': cherrypy.request.request_line})
 
 
 cherrypy.tree.mount(robots())
