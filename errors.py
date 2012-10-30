@@ -42,7 +42,7 @@ class robots(object):
             'cpdata': json.dumps({'base': cherrypy.request.base, 'request_line': cherrypy.request.request_line})})
         d = d.encode('utf-8')
         req = urllib.request.Request('http://localhost:18404/sendmail')
-        req.add_header('Content-Type","application/x-www-form-urlencoded;charset=utf-8')
+        req.add_header('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8')
         res = urllib.request.urlopen(req, d)
         return res.read()
 
