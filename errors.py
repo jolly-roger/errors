@@ -23,6 +23,8 @@ def sendmail(status, message, traceback, version, data):
     s = smtplib.SMTP('localhost')
     s.sendmail(sender, recipient, msg.as_string())
     s.quit()
+    
+    return 'Error'
 
 
 class robots(object):
