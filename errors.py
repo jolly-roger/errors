@@ -27,7 +27,7 @@ def sendmail(status, message, traceback, version, data):
     return 'Error'
 
 
-class robots(object):
+class errors(object):
     @cherrypy.expose
     def sendmail(self, status, message, traceback, version, data):
         return sendmail(status, message, traceback, version, json.loads(data))
@@ -54,14 +54,10 @@ def error_page_default(status, message, traceback, version):
     return sendmail(status, message, traceback, version,
         {'subject': 'Errors error', 'base': cherrypy.request.base, 'request_line': cherrypy.request.request_line})
 
-
-cherrypy.tree.mount(robots())
-
-cherrypy.config.update({'error_page.default': error_page_default})
-cherrypy.config.update({'engine.autoreload_on':False})
-
-from cherrypy.process import servers
-
-def fake_wait_for_occupied_port(host, port): return
-
-servers.wait_for_occupied_port = fake_wait_for_occupied_port
+def wsgi():
+    conf = os.path.join(os.path.dirname(__file__), "errors.conf")
+    tree = cherrypy._cptree.Tree()
+    app = tree.mount(errors(), config=conf)
+    app.config.update({'/': {'error_page.default': error_page_default}})
+    tree.bind_address = (app.config['global']['server.socket_host'], app.config['global']['server.socket_port'])
+    return tree
