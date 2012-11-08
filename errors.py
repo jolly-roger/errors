@@ -3,6 +3,7 @@ import smtplib
 import urllib.request
 import urllib.parse
 import json
+import os.path
 from email.mime.text import MIMEText
 
 
