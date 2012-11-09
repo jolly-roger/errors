@@ -11,9 +11,12 @@ def sendmail(status, message, traceback, version, data):
     sender = 'www@dig-dns.com (www)'
     recipient = 'roger@dig-dns.com'
     
+    if 'headers' not in data:
+        data['headers'] = ''
+    
     text = 'Base: ' + data['base'] + '\n\n' +\
         'Request line: ' + data['request_line'] + '\n\n' +\
-        'Headers: ' + data['headers'] if 'headers' in data else '' + '\n\n' +\
+        'Headers: ' + data['headers'] + '\n\n' +\
         'Status: ' + status + '\n\n' + 'Message: ' + message + '\n\n' +\
         'Traceback: ' + traceback + '\n\n' + 'Version: ' + version
     
