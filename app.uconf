@@ -1,0 +1,5 @@
+[uwsgi]
+socket = 127.0.0.1:18808
+chdir = /home/www
+wsgi = errors
+callable = app
