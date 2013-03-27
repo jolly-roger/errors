@@ -65,4 +65,5 @@ def wsgi():
     app = tree.mount(errors(), config=conf)
     app.config.update({'/': {'error_page.default': error_page_default}})
     tree.bind_address = (app.config['global']['server.socket_host'], app.config['global']['server.socket_port'])
+    cherrypy.log.screen = False
     return tree
